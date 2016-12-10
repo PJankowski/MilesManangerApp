@@ -1,6 +1,6 @@
 export function loginUser(user) {
   return (dispatch) => {
-    fetch('http://localhost:8080/api/login', {
+    return fetch('https://milesmanager.herokuapp.com/api/login', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -13,12 +13,14 @@ export function loginUser(user) {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      let { username, id } = responseJson
-
-      dispatch({type: "FETCH_USER_SUCCESS", payload: {username: username, id: id}})
+      if (responseJson.error && responseJson.error !== "") {
+        dispatch({type: "FETCH_USER_FAILURE", payload: error})
+      } else {
+        dispatch({type: "FETCH_USER_SUCCESS", payload: responseJson})
+      }
     })
     .catch((error) => {
-      dispatch({type: "FETCH_USER_SUCCESS", payload: err})
+      dispatch({type: "FETCH_USER_FAILURE", payload: error})
     })
   }
 }

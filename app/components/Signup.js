@@ -13,7 +13,7 @@ import { loginUser } from '../actions/UserActions'
 
 @connect((store) => {
   return {
-    user: store.user.user
+    user: store.user
   }
 })
 
@@ -23,34 +23,37 @@ class Signup extends Component {
     this.state = {
       username: '',
       password: '',
-      message: ''
+      message: '',
+      error: ''
     };
-  }
 
-  updateUsername(username) {
-    this.setState({
-      username: username
-    })
-  }
-
-  updatePassword(password) {
-    this.setState({
-      password: password
-    })
+    this.submitForm = this.submitForm.bind(this)
   }
 
   submitForm() {
-    this.props.dispatch(loginUser({username: this.state.username, password: this.state.password}))
+    const { username, password } = this.state
+    this.props.dispatch(loginUser({username: username, password: password}))
+      .then((data) => {
+        if (this.props.user.user.error) {
+          this.setState({
+            error: this.props.user.user.error
+          })
+        } else {
+          this.props.navigator.push({
+            id: 'Home'
+          })
+        }
+      })
   }
 
   render() {
     return(
       <View style={styles.container}>
         <View style={styles.form}>
-          <TextInput style={styles.input} onChangeText={this.updateUsername.bind(this)}/>
-          <TextInput style={styles.input} onChangeText={this.updatePassword.bind(this)} />
-          <Button onPress={this.submitForm.bind(this)} title="Signup" />
-          <Text>{this.props.user.username}</Text>
+          <Text style={styles.error}>{this.state.error}</Text>
+          <TextInput style={styles.input} onChangeText={(text) => {this.setState({username: text})}}/>
+          <TextInput style={styles.input} onChangeText={(text) => {this.setState({password: text})}} />
+          <Button onPress={this.submitForm} title="Signup" />
         </View>
       </View>
     )
@@ -74,6 +77,9 @@ const styles = StyleSheet.create({
     height: 30,
     width: 200,
     padding: 8
+  },
+  error: {
+    color: "#F44336"
   }
 })
 

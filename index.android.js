@@ -9,25 +9,37 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Navigator
 } from 'react-native';
 
-export default class MilesManager extends Component {
+import { Provider } from 'react-redux'
+
+import store from './app/Store'
+
+import Signup from './app/components/Signup';
+import Home from './app/components/Home'
+
+class MilesManager extends Component {
+  renderScene(route, navigator) {
+    let _navigator = navigator
+    switch(route.id) {
+      case 'Signup':
+        return (<Signup navigator={navigator} />)
+      case 'Home':
+        return(<Home navigator={navigator} />)
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
+      <Provider store={store}>
+        <Navigator
+          initialRoute={{id: 'Signup'}}
+          renderScene={this.renderScene}
+        />
+      </Provider>
+    )
   }
 }
 
@@ -37,16 +49,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });
 
