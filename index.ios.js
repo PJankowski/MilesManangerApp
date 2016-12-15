@@ -9,35 +9,20 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View,
-  Navigator
+  View
 } from 'react-native';
 
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
+
+import App from './app'
 
 import store from './app/Store'
 
-import Signup from './app/components/Signup';
-import Home from './app/components/Home'
-
 class MilesManager extends Component {
-  renderScene(route, navigator) {
-    let _navigator = navigator
-    switch(route.id) {
-      case 'Signup':
-        return (<Signup navigator={navigator} />)
-      case 'Home':
-        return(<Home navigator={navigator} />)
-    }
-  }
-
   render() {
     return (
       <Provider store={store}>
-        <Navigator
-          initialRoute={{id: 'Signup'}}
-          renderScene={this.renderScene}
-        />
+        <App />
       </Provider>
     )
   }

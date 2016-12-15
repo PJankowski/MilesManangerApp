@@ -1,6 +1,7 @@
 export function getMiles(userId) {
   return (dispatch) => {
-    return fetch('https://milesmanager.herokuapp.com/api/miles/' + userId, {
+    dispatch({type: "FETCH_MILES"})
+    fetch('https://milesmanager.herokuapp.com/api/miles/' + userId, {
       method: 'GET'
     })
     .then((response) => response.json())
